@@ -3,7 +3,7 @@
 <input type="checkbox" id="create-user" class="modal-toggle" />
 <div class="modal">
   <div class="modal-box">
-    <h3 class="font-bold text-lg">Vytvořit nového žáka</h3>
+    <h3 class="font-bold text-lg mb-4">Vytvořit nového žáka</h3>
     <label class="label">
         <span class="label-text">Jméno</span>
       </label>
