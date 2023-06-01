@@ -1,12 +1,14 @@
-<script>
-	let selectedImage = null;
+<script lang="ts">
+	let selectedImage: string | null = null;
 
-	async function handleFileInput(event) {
+	// TODO: Fix this any
+	// TODO: most likely rewrite this whole component
+	async function handleFileInput(event: any) {
 		const file = event.target.files[0];
 		if (file) {
 			const reader = new FileReader();
 			reader.onload = () => {
-				selectedImage = reader.result;
+				selectedImage = reader.result?.toString() ?? null;
 			};
 			reader.readAsDataURL(file);
 		}
@@ -19,7 +21,10 @@
 			video.srcObject = stream;
 			video.autoplay = true;
 
-			document.getElementById('video-container').appendChild(video);
+			const videoContainer = document.getElementById('video-container');
+			if (videoContainer) {
+				videoContainer.appendChild(video);
+			}
 
 			const canvas = document.createElement('canvas');
 			const context = canvas.getContext('2d');
@@ -29,7 +34,9 @@
 				canvas.height = video.videoHeight;
 
 				requestAnimationFrame(function captureFrame() {
-					context.drawImage(video, 0, 0, canvas.width, canvas.height);
+					if (context) {
+						context.drawImage(video, 0, 0, canvas.width, canvas.height);
+					}
 					selectedImage = canvas.toDataURL();
 
 					requestAnimationFrame(captureFrame);
@@ -40,12 +47,14 @@
 		}
 	}
 
+	let checked = true;
+
 	function handleSubmit() {
-		document.getElementById('my-modal').checked = false;
+		checked = false;
 	}
 </script>
 
-<input type="checkbox" id="my-modal" class="modal-toggle" />
+<input type="checkbox" id="my-modal" bind:checked class="modal-toggle" />
 <div class="modal">
 	<div class="modal-box">
 		<h3 class="font-bold text-lg">Nahrát tabulku</h3>
@@ -54,7 +63,7 @@
 			type="file"
 			class="file-input file-input-bordered w-full max-w-xs"
 			accept="image/*"
-			onchange={handleFileInput}
+			on:change={handleFileInput}
 		/>
 
 		<button on:click={handleCameraInput}>Udělat fotku</button>
