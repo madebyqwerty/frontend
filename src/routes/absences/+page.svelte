@@ -3,6 +3,7 @@
 	import Tabs from './Tabs.svelte';
 	import Tab from './Tab.svelte';
 	import Student from './Student.svelte';
+	import ActionButtons from './ActionButtons.svelte';
 
 	export let data: PageData;
 </script>
@@ -17,4 +18,7 @@
 	{#each data.students as student}
 		<Student {student} />
 	{/each}
+	<!-- 	<div class="relative">
+		<ActionButtons />
+	</div> -->
 </section>
