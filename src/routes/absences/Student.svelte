@@ -1,8 +1,5 @@
 <script lang="ts">
-	interface Student {
-		name: string;
-		id: string;
-	}
+	import type { Student, Absence } from '$lib/types';
 	import { ChevronRight } from 'lucide-svelte';
 
 	export let student: Student;
@@ -13,23 +10,16 @@
 	}
 
 	async function getAbsences() {
-		/* 		const res = await fetch(`http://localhost:5000/api/absences/${student.id}`);
+		console.log(student.id);
+		const res = await fetch(`http://localhost:5000/api/absences/${student.id}`);
 
 		const data = await res.json();
 
 		console.log(data);
 
-		if (!res.ok) throw new Error(data); */
+		if (!res.ok) throw new Error(data);
 
-		return [
-			{
-				name: 'John Doe',
-				userId: '7d6fd0c4-6b3d-46d9-9840-5e8874c9c646',
-				id: 'f7cabd53-49e1-4c93-b59e-6035811b134d',
-				lesson: 2,
-				date: '2023-05-14'
-			}
-		];
+		return data as Absence[];
 	}
 </script>
 
@@ -42,12 +32,14 @@
 		{#await getAbsences()}
 			<p>Loading...</p>
 		{:then absences}
-			{#each absences as absence}
-				<div class="flex flex-col gap-1">
-					<p class="text-base-800">{absence.date}</p>
-					<p class="text-base-800">{absence.lesson}</p>
-				</div>
-			{/each}
+			<div class="pl-6">
+				{#each absences as absence}
+					<div class="flex justify-between">
+						<p class="text-base-950 text-sm">{absence.lesson}. Hodina</p>
+						<p class="text-base-700">{new Date(absence.date).toLocaleDateString()}</p>
+					</div>
+				{/each}
+			</div>
 		{:catch error}
 			<p class="text-base-800">{JSON.stringify(error.message)}</p>
 		{/await}
